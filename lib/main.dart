@@ -60,22 +60,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
     });
     getList();
   }
 
+  final dio = Dio();
+
   Future<void> getList() async {
-    final dio = Dio();
-    await dio.get(
+    Response response;
+    response = await dio.get(
       'https://jsonplaceholder.typicode.com/posts',
-      queryParameters: {'_start': 0, '_limit': 2},
+      queryParameters: {'_start': 0, '_limit': 5},
     );
+    print(response.data.toString());
   }
 
   @override
