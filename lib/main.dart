@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:gemadale_app/service/http.dart';
+import 'package:gemadale_app/utils/secure.dart';
+import 'package:logger/logger.dart';
 
 void main() {
   runApp(const MyApp());
@@ -62,7 +65,15 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _counter++;
     });
-    getList();
+    getPosts();
+
+    Logger logger =
+        Logger(printer: PrettyPrinter(printEmojis: true), level: Level.all);
+
+    Secure srcure1 = Secure();
+    Secure srcure2 = Secure();
+    bool areEqual_srcure = identical(srcure1, srcure2);
+    logger.i('Are singletons equal? $areEqual_srcure');
   }
 
   final dio = Dio();
@@ -73,7 +84,11 @@ class _MyHomePageState extends State<MyHomePage> {
       'https://jsonplaceholder.typicode.com/posts',
       queryParameters: {'_start': 0, '_limit': 5},
     );
-    print(response.data.toString());
+  }
+
+  Future<void> getPosts() async {
+    Http.init();
+    await Http.get('/posts', params: {'_start': 0, '_limit': 5});
   }
 
   @override
